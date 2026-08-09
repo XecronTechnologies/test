@@ -1,11 +1,18 @@
-FROM gcc:latest
+FROM alpine:latest
+
+# Install the C compiler and standard library
+RUN apk add --no-cache gcc musl-dev
 
 WORKDIR /app
 
+# Copy your source code
 COPY server.c .
 
-RUN gcc server.c -o server
+# Compile your program statically (makes it self-contained)
+RUN gcc -static -o server server.c
 
+# The port your app uses
 EXPOSE 8080
 
+# The command to run your app
 CMD ["./server"]
