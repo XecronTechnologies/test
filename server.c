@@ -51,7 +51,7 @@ int main() {
     }
     
     printf("✅ Server running on http://0.0.0.0:%d\n", PORT);
-    printf("📝 Returns plain text only (no HTML)\n");
+    printf("📝 Returns plain text (ANSI red text on white bg)\n");
     
     while (1) {
         new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen);
@@ -67,20 +67,20 @@ int main() {
         timeinfo = localtime(&rawtime);
         strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", timeinfo);
         
-        // Plain text response
+        // Plain text response with ANSI color codes (red text on white background)
         char response[1024];
         snprintf(response, sizeof(response),
             "HTTP/1.1 200 OK\r\n"
-            "Content-Type: text/plain\r\n"
+            "Content-Type: text/plain; charset=utf-8\r\n"
             "Connection: close\r\n"
             "\r\n"
-            "Hello World from C!\n"
-            "Server: Pure C Web Server on Render\n"
-            "Date: %s\n"
-            "Message: This is plain text, no HTML here!\n"
-            "Hosted on: Render.com\n"
-            "Language: C\n"
-            "Status: Running\n",
+            "\033[31;47mHello World from C!\033[0m\n"
+            "\033[31;47mServer: Pure C Web Server on Render\033[0m\n"
+            "\033[31;47mDate: %s\033[0m\n"
+            "\033[31;47mMessage: Plain text with ANSI colors!\033[0m\n"
+            "\033[31;47mHosted on: Render.com\033[0m\n"
+            "\033[31;47mLanguage: C\033[0m\n"
+            "\033[31;47mStatus: Running\033[0m\n",
             time_str
         );
         
